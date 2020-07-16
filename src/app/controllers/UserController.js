@@ -1,12 +1,20 @@
+import Queue from '../lib/Queue';
+
 export default {
-async store (req, res){
-    const {name, email, password} = req.body;
+  async store(req, res) {
+    const { name, email, token_reset} = req.body;
+
     const user = {
-        name,
-        email,
-        password,
+      name,
+      email,
+      token_reset     
     };
-    // Enviar email
+
+    //  filas
+    await Queue.add('RegistrationMail', { user });
+
+    await Queue.add('UserReport', { user });
+
     return res.json(user);
-}
+  }
 };
